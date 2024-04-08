@@ -8,6 +8,9 @@ build:
       buildpacks:
         # builder: gcr.io/buildpacks/builder:v1
         builder: paketobuildpacks/builder-jammy-base
+        env:
+          - PROJECT_ID=play-dev-ops
+          - REGION=asia-southeast1
 manifests:
   rawYaml:
     - cloud-run-service.yaml
