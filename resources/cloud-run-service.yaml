@@ -1,19 +1,19 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: llm-altering
+  name: llm-alerting
   annotaions:
     run.googleapis.com/ingress: all
 spec:
   template:
     metadata:
       annotations:
-        run.googleapis.com/client-name: "llm-altering"
+        run.googleapis.com/client-name: "llm-alerting"
         run.googleapis.com/startup-cpu-boost: 'true'
         run.googleapis.com/cpu-throttling: 'false'
     spec:
       containers:
-        - name: llm-altering
+        - name: llm-alerting
           image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
           ports:
           - name: http1

@@ -1,7 +1,7 @@
 apiVersion: skaffold/v4beta9
 kind: Config
 metadata:
-  name: llm-altering
+  name: llm-alerting
 build:
   artifacts:
     - image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
