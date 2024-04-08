@@ -9,8 +9,8 @@ build:
         # builder: gcr.io/buildpacks/builder:v1
         builder: paketobuildpacks/builder-jammy-base
         env:
-          - PROJECT_ID=play-dev-ops
-          - REGION=asia-southeast1
+          - GOOGLE_PYTHON_VERSION="3.10.x"
+
 manifests:
   rawYaml:
     - cloud-run-service.yaml
