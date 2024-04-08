@@ -4,15 +4,17 @@ metadata:
   name: llm-altering
   annotaions:
     run.googleapis.com/ingress: all
-
 spec:
   template:
+    metadata:
+      annotations:
+        run.googleapis.com/client-name: "llm-altering"
+        run.googleapis.com/startup-cpu-boost: 'true'
+        run.googleapis.com/cpu-throttling: 'false'
     spec:
       containers:
         - image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
       env:
-          - name: "PORT"
-            value: "8080"
           - name: "PROJECT_ID"
             value: "play-dev-ops"
           - name: "REGION"
