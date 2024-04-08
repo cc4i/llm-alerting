@@ -10,7 +10,7 @@ build:
 
 manifests:
   rawYaml:
-    - cloud-run-service.yaml
+    - resources/*
 
 deploy:
   cloudrun:

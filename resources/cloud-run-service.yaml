@@ -1,0 +1,20 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: llm-altering
+  annotaions:
+    run.googleapis.com/ingress: all
+
+spec:
+  template:
+    spec:
+      containers:
+        - image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
+      env:
+          - name: "PORT"
+            value: "8080"
+          - name: "PROJECT_ID"
+            value: "play-dev-ops"
+          - name: "REGION"
+            value: "asia-southeast1"
+
