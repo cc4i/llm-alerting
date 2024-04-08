@@ -6,8 +6,8 @@ build:
   artifacts:
     - image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
       buildpacks:
-        # builder: gcr.io/buildpacks/builder:v1
-        builder: paketobuildpacks/builder-jammy-base
+        builder: gcr.io/buildpacks/builder:v1
+        # builder: paketobuildpacks/builder-jammy-base
         env:
           - GOOGLE_PYTHON_VERSION="3.10.x"
 
