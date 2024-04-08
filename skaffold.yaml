@@ -7,6 +7,12 @@ build:
     - image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
       buildpacks:
         builder: gcr.io/buildpacks/builder
+        dependencies:
+          ignore:
+            - ".gitignore"
+            - "*.md"
+            - "*.yaml"
+            - bin/**
 
 manifests:
   rawYaml:
