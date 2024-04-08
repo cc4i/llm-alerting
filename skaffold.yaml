@@ -6,7 +6,7 @@ build:
   artifacts:
     - image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
       buildpacks:
-        builder: gcr.io/buildpacks/builder:v1
+        builder: gcr.io/buildpacks/builder
         # builder: paketobuildpacks/builder-jammy-base
 
 manifests:
