@@ -1,0 +1,13 @@
+apiVersion: skaffold/v4beta9
+kind: Config
+metadata:
+  name: llm-altering
+build:
+  artifacts:
+    - image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
+      buildpacks:
+        # builder: gcr.io/buildpacks/builder:v1
+        builder: paketobuildpacks/builder-jammy-base
+manifests:
+  rawYaml:
+    - cloud-run-service.yaml
