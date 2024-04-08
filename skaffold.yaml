@@ -4,7 +4,7 @@ metadata:
   name: llm-altering
 build:
   artifacts:
-    - image: gcr.io/k8s-skaffold/skaffold-buildpacks
+    - image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
       buildpacks:
         builder: gcr.io/buildpacks/builder:v1
         # builder: paketobuildpacks/builder-jammy-base
