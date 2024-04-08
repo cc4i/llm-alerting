@@ -9,7 +9,7 @@ Leveraging LLMs on GCP to gernerate meaningful guidance for each alerting in ord
 ## Deployment
 ```bash
 # 1. Configure parameters as initial setting
-export _PROJECT_ID=
+export _PROJECT_ID=play-dev-ops
 export _REGION=asia-southeast1
 
 # 1. Update all related parametes
