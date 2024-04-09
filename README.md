@@ -19,14 +19,16 @@ export _GKE_CLUSTER=gke-demo
 export _PUB_SUB=gke-monitor-ps
 
 # 1. Update all related parametes.
-config.sh var
+bin/config.sh var
 
 # 2. Deploy llm-alerting Cloud Run.
-config.sh run
+bin/config.sh run
 
+# 3. Create a GKE cluster for demo (Ignore this step if using existed GKE)
+bin/config.sh demo
 
-# 3. Create a notification channel and alerting policy for demo.
-config.sh demo
+# 4. Create a notification channel and alerting policy for demo.
+config.sh alert
 
 
 ```

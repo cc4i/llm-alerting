@@ -21,7 +21,7 @@ function deploy_run_service()
 {
     skaffold build
     skaffold run
-    gcloud run services add-iam-policy-binding ${SERVICE_NAME}-run \
+    gcloud run services add-iam-policy-binding ${SERVICE_NAME} \
         --region ${REGION} \
         --project ${PROJECT_ID} \
         --member="allUsers" \
@@ -50,16 +50,32 @@ function create_policy()
 }
 
 
-# Take action based on the input argument
+#  ACTION is the first argument of the script
+if [ $# -ne 1]
+then
+    echo "Usage: $0 {run|demo|var|alert}"
+    exit 1
+fi
+
+#
+# "run" to build image and deploy to CR
 if [ ${ACTION} == "run" ]
 then
     build_image
     deploy_run_service
+
+# "demo" to provision a new GKE cluster for demo
 elif [ ${ACTION} == "demo" ]
 then
     create_gke_cluster
-    create_policy
+
+# "var" to replace variables in the all related files
 elif [ ${ACTION} == "var" ]
 then
     config_variables
+
+# "alert" to create a new policy and bind to the service
+elif [ ${ACTION} == "alert" ]
+then
+    create_policy
 fi
