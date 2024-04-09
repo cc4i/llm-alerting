@@ -5,7 +5,9 @@ REGION=asia-southeast1
 PROJECT_ID=play-dev-ops
 
 # What to do as per action
-ACTION = $1
+ACTION=$1
+
+# If Else to Call function as per ${ACTION}
 
 if [ ${ACTION} == "build" ]
 then
@@ -22,7 +24,7 @@ then
 fi
 
 # Build base image for Cloud Run
-build_image()
+function build_image()
 {
     IMG=${REGION}-docker.pkg.dev/${PROJECT_ID}/k8s-asst/${SERVICE_NAME}-base:v1
     docker build -t ${IMG} -f run.Dockerfile .
@@ -30,20 +32,20 @@ build_image()
 }
 
 # Provision a new GKE cluster for demo
-create_gke_cluster()
+function create_gke_cluster()
 {
 
 }
 
 # Replaces variables in the all related files
-config_variables()
+function config_variables()
 {
     # 1. replace variables in the config file
     # 2. 
 }
 
 # Created a new policy and bind to the service
-create_policy()
+function create_policy()
 {
     CLOUR_RUN=`gcloud run services describe  ${SERVICE_NAME} \
                     --platform managed \
