@@ -19,14 +19,13 @@ function build_image()
 # Provision a new GKE cluster for demo
 function create_gke_cluster()
 {
-
+    echo "nothing"
 }
 
 # Replaces variables in the all related files
 function config_variables()
 {
-    # 1. replace variables in the config file
-    # 2. 
+    echo "nothing" 
 }
 
 # Created a new policy and bind to the service
