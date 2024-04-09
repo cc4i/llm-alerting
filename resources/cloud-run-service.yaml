@@ -27,8 +27,3 @@ spec:
             limits:
               cpu: 1000m
               memory: 512Mi
-
-bindings:
-- members:
-  - allUsers
-  role: roles/run.invoker

@@ -16,6 +16,18 @@ function build_image()
     docker push ${IMG}
 }
 
+# Deploy Cloud Run service
+function deploy_run_service()
+{
+    skaffold build
+    skaffold run
+    gcloud run services add-iam-policy-binding ${SERVICE_NAME}-run \
+        --region ${REGION} \
+        --project ${PROJECT_ID} \
+        --member="allUsers" \
+        --role="roles/run.invoker"
+}
+
 # Provision a new GKE cluster for demo
 function create_gke_cluster()
 {
@@ -39,16 +51,15 @@ function create_policy()
 
 
 # Take action based on the input argument
-if [ ${ACTION} == "build" ]
+if [ ${ACTION} == "run" ]
 then
     build_image
-elif [ ${ACTION} == "create" ]
+    deploy_run_service
+elif [ ${ACTION} == "demo" ]
 then
     create_gke_cluster
-elif [ ${ACTION} == "config" ]
+    create_policy
+elif [ ${ACTION} == "var" ]
 then
     config_variables
-elif [ ${ACTION} == "policy" ]
-then
-    create_policy
 fi

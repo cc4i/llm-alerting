@@ -18,16 +18,15 @@ export _REGION=asia-southeast1
 export _GKE_CLUSTER=gke-demo
 export _PUB_SUB=gke-monitor-ps
 
-# 1. Update all related parametes
-config.sh variable
+# 1. Update all related parametes.
+config.sh var
 
-# 2. Deploy llm-alerting to handle alerting message
-skaffold build
-skaffold run
+# 2. Deploy llm-alerting Cloud Run.
+config.sh run
 
 
-# 3. Create a notification channel and alerting policy
-config.sh policy
+# 3. Create a notification channel and alerting policy for demo.
+config.sh demo
 
 
 ```
