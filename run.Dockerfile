@@ -1,4 +1,4 @@
-FROM gcr.io/buildpacks/gcp/run
+FROM gcr.io/buildpacks/gcp/run:google-22
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
   imagemagick && \
