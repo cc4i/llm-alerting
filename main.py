@@ -43,19 +43,19 @@ get_credentail_func = FunctionDeclaration(
 )
 
 # Function to collect infomation of issued pod and analyse
-troubleshoot_pod_func = FunctionDeclaration(
-    name="troubleshoot_pod",
+collect_pod_information_fun = FunctionDeclaration(
+    name="collect_pod_information",
     description="""
-        Troubleshooting the potential issues of the pod through collecting metrics, logs, events, etc. from the GKE cluster.
+        Connect to the GKE cluster and retrieve pods information.
     """,
     parameters={
         "type": "object",
         "properties": {
-            "namespace": {
+            "namespace_name": {
                 "type": "string",
-                "description": "The namespace where to list pods, which is a lowercase RFC 1123 label must consist of lower case alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name',  or '123-abc', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?')"
+                "description": "The namespace where the pod is located, which is a lowercase RFC 1123 label must consist of lower case alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name',  or '123-abc', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?')"
             },
-            "name": {
+            "pod_name": {
                 "type": "string",
                 "description": "The name of the pod to get by"
             },
@@ -73,7 +73,7 @@ troubleshoot_pod_func = FunctionDeclaration(
 gke_cluster_tool = Tool (
     function_declarations= [
         get_credentail_func, 
-        troubleshoot_pod_func
+        collect_pod_information_fun
     ]
 )
 
@@ -94,22 +94,34 @@ app = FastAPI()
 
 @app.post("/alerting")
 def analyse_alerting(message: Union[str, dict]) -> dict:
+    
     prompt = """
         You are an Kubernetes expert and highly skilled in all Google Cloud services, Linux, and shell scripts. 
-        Your task is to answer the question as per conext with a concise and summarized response with actionable step by step guidance. 
-        Only use information that we have or you collected from the context, do not make up information.
+        Your task is to analyze the alerting as per CONTEXT with the following steps: 
+        
+        1. Configure the credential and connect to the GKE 
+        2. Collect pods information from the GKE
+        3. Provide a concise summarized response and follow up with a list of step by step actionable guidances to address alerting issues. 
+        
+        Only use information that provied, do not make up information.
 
-        QUESTION:
+        CONTEXT:
         {}
 
-        Helpful Answer:
-        """.format(message)
+        Response:
+
+        """.format(message["incident"]["resource"]["labels"])
     
     response = chat.send_message(prompt)
-    response = response.candidates[0].content.parts[0]
-    print("----------------")
+    print("---------------->")
+    print(prompt)
+    print("---------------->\n")
+    print("----------------<")
     print(response)
-    print("----------------\n")
+    print("----------------<\n")
+    response = response.candidates[0].content.parts[0]
+
+    
     function_calling_in_process = True
     while function_calling_in_process:
         try:
@@ -131,9 +143,9 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
 
             if response.function_call.name == "troubleshoot_pod":
                 api_response = {
-                    "cmd_pod_description": "kubectl describe pods {} -n {}".format(response.function_call.args["name"], response.function_call.args["namespace"]),
-                    "cmd_pod_logs": "kubectl logs {} -n {}".format(response.function_call.args["name"], response.function_call.args["namespace"]),
-                    "cmd_events": "kubectl get events -n {}".format(response.function_call.args["namespace"]),
+                    "cmd_pod_description": "kubectl describe pods {} -n {}".format(response.function_call.args["pod_name"], response.function_call.args["namespace_name"]),
+                    "cmd_pod_logs": "kubectl logs {} -n {}".format(response.function_call.args["pod_name"], response.function_call.args["namespace_name"]),
+                    "cmd_events": "kubectl get events -n {}".format(response.function_call.args["namespace_name"]),
                     }
                 api_response["pod_description"]=os.popen(api_response["cmd_pod_description"]).read()
                 api_response["pod_logs"]=os.popen(api_response["cmd_pod_logs"]).read()
