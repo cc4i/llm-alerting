@@ -11,7 +11,7 @@ ACTION=$1
 # Build base image for Cloud Run
 function build_image()
 {
-    IMG=${REGION}-docker.pkg.dev/${PROJECT_ID}/k8s-asst/${SERVICE_NAME}-base:google-22
+    IMG=${REGION}-docker.pkg.dev/${PROJECT_ID}/k8s-asst/${SERVICE_NAME}-base:google.22
     docker build -t ${IMG} -f run.Dockerfile .
     docker push ${IMG}
 }
