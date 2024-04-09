@@ -4,24 +4,9 @@ SERVICE_NAME=llm-alerting
 REGION=asia-southeast1
 PROJECT_ID=play-dev-ops
 
-# What to do as per action
+# Parse input arguments 
 ACTION=$1
 
-# If Else to Call function as per ${ACTION}
-
-if [ ${ACTION} == "build" ]
-then
-    build_image
-elif [ ${ACTION} == "create" ]
-then
-    create_gke_cluster
-elif [ ${ACTION} == "config" ]
-then
-    config_variables
-elif [ ${ACTION} == "policy" ]
-then
-    create_policy
-fi
 
 # Build base image for Cloud Run
 function build_image()
@@ -54,3 +39,17 @@ function create_policy()
 }
 
 
+# Take action based on the input argument
+if [ ${ACTION} == "build" ]
+then
+    build_image
+elif [ ${ACTION} == "create" ]
+then
+    create_gke_cluster
+elif [ ${ACTION} == "config" ]
+then
+    config_variables
+elif [ ${ACTION} == "policy" ]
+then
+    create_policy
+fi
