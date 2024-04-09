@@ -4,17 +4,18 @@ SERVICE_NAME=llm-alerting
 REGION= asia-southeast1
 PROJECT_ID=play-dev-ops
 
+fun = $1
 
-if [ $1 = "build" ]
+if [ $1 == "build" ]
 then
     build_image
-elif [ $1 = "create" ]
+elif [ $1 == "create" ]
 then
     create_gke_cluster
-elif [ $1 = "config" ]
+elif [ $1 == "config" ]
 then
     config_variables
-elif [ $1 = "policy" ]
+elif [ $1 == "policy" ]
 then
     create_policy
 fi
