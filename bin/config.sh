@@ -1,21 +1,22 @@
 #!/bin/bash
 
 SERVICE_NAME=llm-alerting
-REGION= asia-southeast1
+REGION=asia-southeast1
 PROJECT_ID=play-dev-ops
 
-fun = $1
+# What to do as per action
+ACTION = $1
 
-if [ $1 == "build" ]
+if [ ${ACTION} == "build" ]
 then
     build_image
-elif [ $1 == "create" ]
+elif [ ${ACTION} == "create" ]
 then
     create_gke_cluster
-elif [ $1 == "config" ]
+elif [ ${ACTION} == "config" ]
 then
     config_variables
-elif [ $1 == "policy" ]
+elif [ ${ACTION} == "policy" ]
 then
     create_policy
 fi
