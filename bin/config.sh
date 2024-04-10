@@ -43,18 +43,18 @@ function config_variables()
 {
     echo "Replace variables in the all related files"
     echo "bin/config.env"
-    sed -e 's/_REGION/'${REGION}'/g' bin/config.env
-    sed -i -e 's/_PROJECT_ID/'${PROJECT_ID}'/g' bin/config.env
-    sed -i -e 's/_WEBHOOK_URL/'${WEBHOOK_URL}'/g' bin/config.env
+    sed -e -i 's/_REGION/'${REGION}'/g' bin/config.env
+    sed -e -i 's/_PROJECT_ID/'${PROJECT_ID}'/g' bin/config.env
+    sed -e -i 's/_WEBHOOK_URL/'${WEBHOOK_URL}'/g' bin/config.env
  
     echo "resources/cloud-run-service.yaml"
-    sed -e 's/_REGION/'${REGION}'/g' resources/cloud-run-service.yaml
-    sed -e 's/_PROJECT_ID/'${PROJECT_ID}'/g' resources/cloud-run-service.yaml
-    sed -e 's#_WEBHOOK_URL#'${WEBHOOK_URL}'#g' resources/cloud-run-service.yaml
+    sed -e -i 's/_REGION/'${REGION}'/g' resources/cloud-run-service.yaml
+    sed -e -i 's/_PROJECT_ID/'${PROJECT_ID}'/g' resources/cloud-run-service.yaml
+    sed -e -i 's#_WEBHOOK_URL#'${WEBHOOK_URL}'#g' resources/cloud-run-service.yaml
 
     echo "skaffold.yaml"
-    sed -e 's/_REGION/'${REGION}'/g' skaffold.yaml
-    sed -e 's/_PROJECT_ID/'${PROJECT_ID}'/g' skaffold.yaml
+    sed -e -i 's/_REGION/'${REGION}'/g' skaffold.yaml
+    sed -e -i 's/_PROJECT_ID/'${PROJECT_ID}'/g' skaffold.yaml
 
 
 }
@@ -98,8 +98,8 @@ function create_policy()
     NOTIFICATION_CHANNEL_ID=`gcloud alpha monitoring channels list \
         --project ${PROJECT_ID} \
         --format json |jq -c '.[]|select(.displayName == "gke-monitor-channel")'|jq -r -c '.name'`
-    sed -e 's/_PROJECT_ID/'${PROJECT_ID}'/g' bin/alert-policy.json
-    sed -e 's/<_NOTIFICATION_CHANNEL_ID>/'${NOTIFICATION_CHANNEL_ID}'/g' bin/alert-policy.json
+    sed -e -i 's/_PROJECT_ID/'${PROJECT_ID}'/g' bin/alert-policy.json
+    sed -e -i 's/<_NOTIFICATION_CHANNEL_ID>/'${NOTIFICATION_CHANNEL_ID}'/g' bin/alert-policy.json
 
     # Create a incident policy
     # https://cloud.google.com/monitoring/alerts/using-alerting-api#incident_policies
