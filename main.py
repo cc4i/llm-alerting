@@ -4,6 +4,7 @@ from fastapi import FastAPI
 import vertexai
 from vertexai.generative_models import FunctionDeclaration, GenerativeModel, Part, Tool
 import requests
+import json
 
 # Function to get GKE credential 
 get_credentail_func = FunctionDeclaration(
@@ -47,7 +48,7 @@ get_credentail_func = FunctionDeclaration(
 collect_pod_information_fun = FunctionDeclaration(
     name="collect_pod_information",
     description="""
-        Connect to the GKE cluster and retrieve pods information.
+        Collect pod information from the GKE cluster.
     """,
     parameters={
         "type": "object",
@@ -86,7 +87,7 @@ REGION =os.environ["REGION"]  # @param {type:"string"}
 vertexai.init(project=PROJECT_ID, location=REGION)
 
 # 3. Initialize the model
-model = GenerativeModel("gemini-1.0-pro", generation_config={"temperature": 0.5}, tools=[gke_cluster_tool])
+model = GenerativeModel("gemini-1.0-pro-002", generation_config={"temperature": 0.5}, tools=[gke_cluster_tool])
 chat = model.start_chat(response_validation=False)
 
 # 4. Initialize HTTP Server
@@ -98,18 +99,16 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
     
     prompt = """
         You are an Kubernetes expert and highly skilled in all Google Cloud services, Linux, and shell scripts. 
-        Your task is to analyze the alerting as per CONTEXT with the following steps: 
+        Your task is to troubleshoot the problematic pod as per CONTEXT with the following steps: 
         
-        1. Configure the credential and connect to the GKE 
-        2. Collect pods information from the GKE
-        3. Provide a concise summarized response and follow up with a list of step by step actionable guidances to address alerting issues. 
+        1. Configure the credential and connect to the GKE cluster.
+        2. Collect the pod information from the GKE cluster.
+        3. Provide a summary of pod, a consise explanation of the issue and follow by step by step solutions to address the issues. 
         
         Only use information that provied, do not make up information.
 
         CONTEXT:
         {}
-
-        Response:
 
         """.format(message["incident"]["resource"]["labels"])
     
@@ -142,7 +141,7 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
                 print(os.popen(api_response["get_credential"]).read())
 
 
-            if response.function_call.name == "troubleshoot_pod":
+            if response.function_call.name == "collect_pod_information":
                 api_response = {
                     "cmd_pod_description": "kubectl describe pods {} -n {}".format(response.function_call.args["pod_name"], response.function_call.args["namespace_name"]),
                     "cmd_pod_logs": "kubectl logs {} -n {}".format(response.function_call.args["pod_name"], response.function_call.args["namespace_name"]),
@@ -177,11 +176,15 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
 def health_check():
     return {"health": "ok"}
 
-
-def send_message(notification: dict):
+@app.post("/message")
+def send_message(notification: Union[str, dict])-> dict:
     webhook_url=os.environ["WEBHOOK_URL"]
-    message_template= """
-    {
+    print("----------------------->>")
+    print(webhook_url)
+    print("----------------------->>")
+    print(notification)
+    print("----------------------->>")
+    message_template={
         "cards": [
             {
                 "header": {
@@ -193,7 +196,7 @@ def send_message(notification: dict):
                         "widgets": [
                             {
                                 "textParagraph": {
-                                    "text": "{}"
+                                    "text": notification["response"]
                                 }
                             }
                         ]
@@ -208,7 +211,7 @@ def send_message(notification: dict):
                                             "text": "GO TO INCIDENT",
                                             "onClick": {
                                                 "openLink": {
-                                                    "url": "{}"
+                                                    "url": notification["url"]
                                                 }
                                             }
                                         }
@@ -221,6 +224,10 @@ def send_message(notification: dict):
             }
         ]
     }
-    """
-    msg = message_template.format(notification["response"], notification["url"])
-    requests.post(webhook_url, json=msg)
+        
+    response = requests.post(webhook_url, json=message_template, headers={"Content-Type": "application/json"})
+    print(response)
+    print(response.text)
+    return {"status": response.status_code}
+
+

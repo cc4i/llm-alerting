@@ -1,4 +1,4 @@
-apiVersion: skaffold/v4beta8
+apiVersion: skaffold/v4beta9
 kind: Config
 metadata:
   name: llm-alerting
@@ -17,7 +17,7 @@ build:
 
 manifests:
   rawYaml:
-    - resources/
+    - resources/*
 
 deploy:
   cloudrun:
