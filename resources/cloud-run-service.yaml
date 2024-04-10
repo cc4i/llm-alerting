@@ -14,17 +14,17 @@ spec:
     spec:
       containers:
         - name: llm-alerting
-          image: <_REGION>-docker.pkg.dev/<_PROJECT_ID>/k8s-asst/llm-alerting
+          image: _REGION-docker.pkg.dev/_PROJECT_ID/k8s-asst/llm-alerting
           ports:
           - name: http1
             containerPort: 8000
           env:
             - name: "PROJECT_ID"
-              value: "<_PROJECT_ID>"
+              value: "_PROJECT_ID"
             - name: "REGION"
-              value: "<_REGION>"
+              value: "_REGION"
             - name: "WEBHOOK_URL"
-              value: "<_WEBHOOK_URL>"
+              value: "_WEBHOOK_URL"
           resources:
             limits:
               cpu: 1000m
