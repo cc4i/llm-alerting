@@ -14,15 +14,17 @@ spec:
     spec:
       containers:
         - name: llm-alerting
-          image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
+          image: <_REGION>-docker.pkg.dev/<_PROJECT_ID>/k8s-asst/llm-alerting
           ports:
           - name: http1
             containerPort: 8000
           env:
             - name: "PROJECT_ID"
-              value: "play-dev-ops"
+              value: "<_PROJECT_ID>"
             - name: "REGION"
-              value: "asia-southeast1"
+              value: "<_REGION>"
+            - name: "WEBHOOK_URL"
+              value: "<_WEBHOOK_URL>"
           resources:
             limits:
               cpu: 1000m

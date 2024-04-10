@@ -3,6 +3,7 @@ from typing import Union
 from fastapi import FastAPI
 import vertexai
 from vertexai.generative_models import FunctionDeclaration, GenerativeModel, Part, Tool
+import requests
 
 # Function to get GKE credential 
 get_credentail_func = FunctionDeclaration(
@@ -167,10 +168,59 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
         except AttributeError:
                     function_calling_in_process = False
 
-    return {"response": response.text}
+    notification = {"response": response.text, "url": message["incident"]["url"]}
+    send_message(notification)
+    return notification
 
 
 @app.get("/health")
 def health_check():
     return {"health": "ok"}
 
+
+def send_message(notification: dict):
+    webhook_url=os.environ["WEBHOOK_URL"]
+    message_template= """
+    {
+        "cards": [
+            {
+                "header": {
+                    "title": " Pod Restart Alerting"
+                },
+                "sections": [
+                    {
+                        "header": "<b><font color=\"#ff0000\">Incident Summary</font></b>",
+                        "widgets": [
+                            {
+                                "textParagraph": {
+                                    "text": "{}"
+                                }
+                            }
+                        ]
+                    },
+
+                    {
+                        "widgets": [
+                            {
+                                "buttons": [
+                                    {
+                                        "textButton": {
+                                            "text": "GO TO INCIDENT",
+                                            "onClick": {
+                                                "openLink": {
+                                                    "url": "{}"
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+    """
+    msg = message_template.format(notification["response"], notification["url"])
+    requests.post(webhook_url, json=msg)

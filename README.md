@@ -13,10 +13,9 @@ Leveraging LLMs on GCP to gernerate meaningful guidance for each alerting in ord
 ## Deployment
 ```bash
 # 1. Configure parameters as initial setting
-export _PROJECT_ID=play-dev-ops
-export _REGION=asia-southeast1
-export _GKE_CLUSTER=gke-demo
-export _PUB_SUB=gke-monitor-ps
+export PROJECT_ID=<_YOUR_PROJECT_ID>
+export REGION=<_YOUR_GKE_CLUSTER>
+export WEBHOOK_URL=<_YOUR_CHAT_WEBHOOK_URL>
 
 # 1. Update all related parametes.
 bin/config.sh var

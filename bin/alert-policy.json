@@ -1,0 +1,33 @@
+{
+    "displayName": "pod-restart-alert",
+    "userLabels": {},
+    "conditions": [
+      {
+        "displayName": "Kubernetes Container - Restart count",
+        "conditionThreshold": {
+            "filter": "resource.type = \"k8s_container\" AND resource.labels.project_id = \"<_PROJECT_ID>\" AND metric.type = \"kubernetes.io/container/restart_count\"",
+          "aggregations": [
+            {
+              "alignmentPeriod": "300s",
+              "crossSeriesReducer": "REDUCE_NONE",
+              "perSeriesAligner": "ALIGN_RATE"
+            }
+          ],
+          "comparison": "COMPARISON_GT",
+          "duration": "0s",
+          "trigger": {
+            "count": 1
+          }
+        }
+      }
+    ],
+    "alertStrategy": {
+      "autoClose": "3600s"
+    },
+    "combiner": "OR",
+    "enabled": true,
+    "notificationChannels": [
+      "<_NOTIFICATION_CHANNEL_ID>"
+    ],
+    "severity": "SEVERITY_UNSPECIFIED"
+  }
