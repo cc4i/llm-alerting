@@ -109,7 +109,7 @@ function create_policy()
 
 
 #  ACTION is the first argument of the script
-if [ $# -ne 1]
+if [ $# -ne 1 ]
 then
     echo "Usage: $0 {run|demo|var|alert}"
     exit 1
