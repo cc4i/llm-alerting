@@ -4,10 +4,10 @@ metadata:
   name: llm-alerting
 build:
   artifacts:
-    - image: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting
+    - image: <_REGION>-docker.pkg.dev/<_PROJECT_ID>/k8s-asst/llm-alerting
       buildpacks:
         builder: gcr.io/buildpacks/builder:google-22
-        runImage: asia-southeast1-docker.pkg.dev/play-dev-ops/k8s-asst/llm-alerting-base
+        runImage: <_REGION>-docker.pkg.dev/<_PROJECT_ID>/k8s-asst/llm-alerting-base
         dependencies:
           ignore:
             - ".gitignore"
@@ -21,6 +21,6 @@ manifests:
 
 deploy:
   cloudrun:
-    projectid: play-dev-ops
-    region: asia-southeast1
+    projectid: <_PROJECT_ID>
+    region: <_REGION>
 

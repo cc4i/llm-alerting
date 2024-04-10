@@ -49,7 +49,10 @@ function config_variables()
     sed -i 's/<_REGION>/'${REGION}'/g' resources/cloud-run-service.yaml
     sed -i 's/<_PROJECT_ID>/'${PROJECT_ID}'/g' resources/cloud-run-service.yaml
     sed -i 's/<_WEBHOOK_URL>/'${WEBHOOK_URL}'/g' resources/cloud-run-service.yaml
-    
+
+    sed -i 's/<_REGION>/'${REGION}'/g' skaffold.yaml
+    sed -i 's/<_PROJECT_ID>/'${PROJECT_ID}'/g' skaffold.yaml
+
 
 }
 
