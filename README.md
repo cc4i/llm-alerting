@@ -1,4 +1,4 @@
-# Building an intelligent alerting with Gemini & Function calling
+# An intelligent alerting with Gemini & Function calling
 
 ## Description
 Leveraging LLMs on GCP to gernerate meaningful guidance for each alerting in order to accelerate problem solving rather than a simple alerting message.
