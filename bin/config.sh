@@ -24,6 +24,19 @@ function deploy_run_service()
         --project ${PROJECT_ID} \
         --member="allUsers" \
         --role="roles/run.invoker"
+    
+    # Get the project number
+    # https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects
+    PROJECT_NUMBER=`gcloud projects describe ${PROJECT_ID} --format="value(project_number)"`
+
+    # Assgin roles to the service account, which is bound with Cloud Run
+    gcloud projects add-iam-policy-binding ${PROJECT_ID} \
+        --role roles/aiplatform.user \
+        --member serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com
+    gcloud projects add-iam-policy-binding ${PROJECT_ID} \
+        --role roles/container.admin \
+        --member serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com
+
 }
 
 # Provision a new GKE cluster for demo
@@ -64,6 +77,7 @@ function create_policy()
 {
     # Get the Cloud Run service URL
     CLOUR_RUN=`gcloud run services describe  ${SERVICE_NAME} \
+                    --project ${PROJECT_ID} \
                     --platform managed \
                     --region ${REGION} \
                     --format 'value(status.url)'`
@@ -78,11 +92,13 @@ function create_policy()
     # Binding the service account to the topic in order to publish messages by Incident Policy
     gcloud pubsub topics add-iam-policy-binding \
         projects/${PROJECT_NUMBER}/topics/gke-monitor-ps \
+        --project ${PROJECT_ID} \
         --role=roles/pubsub.publisher \
         --member=serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-monitoring-notification.iam.gserviceaccount.com
 
     # Create a Pub/Sub subscription and bind with Cloud Run
     gcloud pubsub subscriptions create gke-monitor-ps-sub \
+        --project ${PROJECT_ID} \
         --topic gke-monitor-ps \
         --push-endpoint ${CLOUR_RUN} \
         --message-encoding json \
