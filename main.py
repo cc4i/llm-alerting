@@ -98,12 +98,15 @@ app = FastAPI()
 def analyse_alerting(message: Union[str, dict]) -> dict:
     
     prompt = """
-        You are an Kubernetes expert and highly skilled in all Google Cloud services, Linux, and shell scripts. 
-        Your task is to troubleshoot the problematic pod as per CONTEXT with the following steps: 
+        You are an Kubernetes expert with extensive knowledge of Google Cloud services, Linux, and shell scripts. 
+        Your task is to troubleshoot the problematic Pod as per CONTEXT with the following steps: 
         
         1. Configure the credential and connect to the GKE cluster.
         2. Collect the pod information from the GKE cluster.
-        3. Provide a summary of pod, a consise explanation of the issue and follow by step by step solutions to address the issues. 
+        3. Provide a report as following format: 
+            ## Pod Summary: The overview of Pod, such as Pod name, namespace, status, key events and observations from logs, etc.
+            ## Issue: A consise outline the root cause determined from the information.
+            ## Solutions: Numbered list of steps, as well as include relevant kubectl or gcloud commands where applicable.
         
         Only use information that provied, do not make up information.
 
@@ -174,7 +177,7 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
 
 @app.get("/health")
 def health_check():
-    return {"health": "ok"}
+    return {"health": "ok", "app": "main.py"}
 
 @app.post("/message")
 def send_message(notification: Union[str, dict])-> dict:

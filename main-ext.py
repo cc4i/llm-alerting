@@ -206,7 +206,7 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
 
 @app.get("/health")
 def health_check():
-    return {"health": "ok"}
+    return {"health": "ok", "app": "main-ext.py"}
 
 @app.post("/message")
 def send_message(notification: Union[str, dict])-> dict:

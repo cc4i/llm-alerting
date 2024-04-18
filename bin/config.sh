@@ -55,15 +55,11 @@ function create_gke_cluster()
 function config_variables()
 {
     echo "Replace variables in the all related files"
-    # echo "bin/config.env"
-    # sed -i -e 's/_REGION/'${REGION}'/g' bin/config.env
-    # sed -i -e 's/_PROJECT_ID/'${PROJECT_ID}'/g' bin/config.env
-    # sed -i -e 's#_WEBHOOK_URL#'${WEBHOOK_URL}'#g' bin/config.env
  
     echo "resources/cloud-run-service.yaml"
     sed -i -e 's/_REGION/'${REGION}'/g' resources/cloud-run-service.yaml
     sed -i -e 's/_PROJECT_ID/'${PROJECT_ID}'/g' resources/cloud-run-service.yaml
-    sed -i -e 's#_WEBHOOK_URL#'${WEBHOOK_URL}'#g' resources/cloud-run-service.yaml
+    sed -i -e 's/_WEBHOOK_URL/'${WEBHOOK_URL}'#g' resources/cloud-run-service.yaml
 
     echo "skaffold.yaml"
     sed -i -e 's/_REGION/'${REGION}'/g' skaffold.yaml
