@@ -16,6 +16,11 @@ Leveraging LLMs on GCP to gernerate meaningful guidance for each alerting in ord
 ## Deployment
 ```bash
 # 1. Modify initial setting in bin/config.env
+#
+# Notice: 
+# To replace webhook url, I use sed here. In sed's replacement section, the '&' represents the entire text that matched your search pattern. To include a literal '&' in the replacement, you need to escape it with a backslash.
+#
+
 vi bin/config.env
 
 # 2. Update all related parametes.
