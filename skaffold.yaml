@@ -9,6 +9,9 @@ build:
         builder: gcr.io/buildpacks/builder:google-22
         runImage: _REGION-docker.pkg.dev/_PROJECT_ID/k8s-asst/llm-alerting-base
         dependencies:
+          paths: 
+            - "*.py"
+            - "resources/*.yaml"
           ignore:
             - ".gitignore"
             - "*.md"
