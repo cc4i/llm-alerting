@@ -79,16 +79,7 @@ gke_cluster_tool = Tool (
     ]
 )
 
-# 1. Initialize the model
-PROJECT_ID = os.environ["PROJECT_ID"]  # @param {type:"string"}
-REGION =os.environ["REGION"]  # @param {type:"string"}
 
-# 2. Initialize Vertex AI SDK
-vertexai.init(project=PROJECT_ID, location=REGION)
-
-# 3. Initialize the model
-model = GenerativeModel("gemini-1.0-pro-002", generation_config={"temperature": 0.5}, tools=[gke_cluster_tool])
-chat = model.start_chat(response_validation=False)
 
 # 4. Initialize HTTP Server
 app = FastAPI()
@@ -96,7 +87,18 @@ app = FastAPI()
 
 @app.post("/alerting")
 def analyse_alerting(message: Union[str, dict]) -> dict:
-    
+
+    # 1. Initialize the model
+    PROJECT_ID = os.environ["PROJECT_ID"]  # @param {type:"string"}
+    REGION =os.environ["REGION"]  # @param {type:"string"}
+
+    # 2. Initialize Vertex AI SDK
+    vertexai.init(project=PROJECT_ID, location=REGION)
+
+    # 3. Initialize the model
+    model = GenerativeModel("gemini-1.0-pro-002", generation_config={"temperature": 0.5}, tools=[gke_cluster_tool])
+    chat = model.start_chat(response_validation=False)
+
     prompt = """
         You are an Kubernetes expert with extensive knowledge of Google Cloud services, Linux, and shell scripts. 
         Your task is to troubleshoot the problematic Pod as per CONTEXT with the following steps: 
