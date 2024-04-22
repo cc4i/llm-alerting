@@ -107,10 +107,10 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
         2. Collect the pod information from the GKE cluster.
         3. Provide a report as following format: 
             ## Pod Summary: The overview of Pod, such as Pod name, namespace, status, key events and observations from logs, etc.
-            ## Issue: A consise outline the root cause determined from the information.
+            ## Issue: A concise outline the root cause determined from the information.
             ## Solutions: Numbered list of steps, as well as include relevant kubectl or gcloud commands where applicable.
         
-        Only use information that provied, do not make up information.
+         Only use information that provided, do not make up information.
 
         CONTEXT:
         {}
@@ -168,6 +168,9 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
                             },
                         ),
                     )
+            print("----------------<")
+            print(response)
+            print("----------------<\n")
             response = response.candidates[0].content.parts[0]
         except AttributeError:
                     function_calling_in_process = False
