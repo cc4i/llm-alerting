@@ -96,7 +96,7 @@ def analyse_alerting(message: Union[str, dict]) -> dict:
     vertexai.init(project=PROJECT_ID, location=REGION)
 
     # 3. Initialize the model
-    model = GenerativeModel("gemini-1.0-pro-002", generation_config={"temperature": 0.5}, tools=[gke_cluster_tool])
+    model = GenerativeModel("gemini-1.5-pro-001", generation_config={"temperature": 0.6}, tools=[gke_cluster_tool])
     chat = model.start_chat(response_validation=False)
 
     prompt = """
